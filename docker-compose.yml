@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  caresignal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: caresignal-app
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - JWT_SECRET=caresignal_super_secret_production_key_456
+    volumes:
+      - caresignal-db-data:/app/server/data
+    restart: unless-stopped
+
+volumes:
+  caresignal-db-data:
+    driver: local

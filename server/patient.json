@@ -1,0 +1,14 @@
+{
+  "profile": {
+    "name": "Maya Chen",
+    "age": 58,
+    "sex": "Female",
+    "condition": "Hypertension and Type 2 diabetes"
+  },
+  "latest": {
+    "systolic": 125,
+    "diastolic": 76,
+    "glucose": 131,
+    "heartRate": 68
+  }
+}

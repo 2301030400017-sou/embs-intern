@@ -1,0 +1,16 @@
+{
+  "name": "CareSignal",
+  "short_name": "CareSignal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#5eead4",
+  "description": "Patient-centric healthcare dashboard with explainable insights",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
