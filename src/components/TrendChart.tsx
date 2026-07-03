@@ -9,25 +9,23 @@ type TrendChartProps = {
 };
 
 // Generates a smooth cubic Bezier path for the line
-function buildSmoothPath(values: number[], width: number, height: number, padding: number) {
+function buildSmoothPath(values: number[], width: number, height: number, padding: number, globalMin: number, globalMax: number) {
   if (values.length === 0) return '';
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = max - min || 1;
+  const span = globalMax - globalMin || 1;
   const innerWidth = width - padding * 2;
   const innerHeight = height - padding * 2;
 
   let path = '';
   for (let i = 0; i < values.length; i++) {
     const x = padding + (innerWidth * i) / Math.max(1, values.length - 1);
-    const normalized = (values[i] - min) / span;
+    const normalized = (values[i] - globalMin) / span;
     const y = padding + innerHeight - normalized * innerHeight;
 
     if (i === 0) {
       path += `M ${x.toFixed(1)} ${y.toFixed(1)}`;
     } else {
       const prevX = padding + (innerWidth * (i - 1)) / Math.max(1, values.length - 1);
-      const prevNormalized = (values[i - 1] - min) / span;
+      const prevNormalized = (values[i - 1] - globalMin) / span;
       const prevY = padding + innerHeight - prevNormalized * innerHeight;
 
       // Smooth horizontal-bound control points
@@ -43,28 +41,26 @@ function buildSmoothPath(values: number[], width: number, height: number, paddin
 }
 
 // Generates a closed area path that goes to the bottom axes line
-function buildAreaPath(values: number[], width: number, height: number, padding: number) {
+function buildAreaPath(values: number[], width: number, height: number, padding: number, globalMin: number, globalMax: number) {
   if (values.length === 0) return '';
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = max - min || 1;
+  const span = globalMax - globalMin || 1;
   const innerWidth = width - padding * 2;
   const innerHeight = height - padding * 2;
   const bottomY = height - padding;
 
   const firstX = padding;
-  const firstNormalized = (values[0] - min) / span;
+  const firstNormalized = (values[0] - globalMin) / span;
   const firstY = padding + innerHeight - firstNormalized * innerHeight;
 
   let path = `M ${firstX.toFixed(1)} ${bottomY.toFixed(1)} L ${firstX.toFixed(1)} ${firstY.toFixed(1)}`;
   
   for (let i = 1; i < values.length; i++) {
     const x = padding + (innerWidth * i) / Math.max(1, values.length - 1);
-    const normalized = (values[i] - min) / span;
+    const normalized = (values[i] - globalMin) / span;
     const y = padding + innerHeight - normalized * innerHeight;
 
     const prevX = padding + (innerWidth * (i - 1)) / Math.max(1, values.length - 1);
-    const prevNormalized = (values[i - 1] - min) / span;
+    const prevNormalized = (values[i - 1] - globalMin) / span;
     const prevY = padding + innerHeight - prevNormalized * innerHeight;
 
     const cpX1 = prevX + (x - prevX) / 3;
@@ -129,7 +125,7 @@ export default function TrendChart({ labels, series, title, subtitle }: TrendCha
 
           {/* Area under line plots */}
           {series.map((entry, index) => {
-            const areaPath = buildAreaPath(entry.values, width, height, padding);
+            const areaPath = buildAreaPath(entry.values, width, height, padding, min, max);
             return (
               <path
                 key={`area-${entry.label}`}
@@ -141,7 +137,7 @@ export default function TrendChart({ labels, series, title, subtitle }: TrendCha
 
           {/* Line plots */}
           {series.map((entry) => {
-            const linePath = buildSmoothPath(entry.values, width, height, padding);
+            const linePath = buildSmoothPath(entry.values, width, height, padding, min, max);
             return (
               <path
                 key={`line-${entry.label}`}
@@ -158,11 +154,9 @@ export default function TrendChart({ labels, series, title, subtitle }: TrendCha
           {/* Data point circle markers */}
           {series.map((entry) =>
             entry.values.map((value, index) => {
-              const minValue = Math.min(...entry.values);
-              const maxValue = Math.max(...entry.values);
               const innerWidth = width - padding * 2;
               const innerHeight = height - padding * 2;
-              const normalized = (value - minValue) / ((maxValue - minValue) || 1);
+              const normalized = (value - min) / ((max - min) || 1);
               const x = padding + (innerWidth * index) / Math.max(1, entry.values.length - 1);
               const y = padding + innerHeight - normalized * innerHeight;
               

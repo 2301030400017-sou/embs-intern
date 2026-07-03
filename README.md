@@ -2,7 +2,7 @@
 
 CareSignal is a patient-centric healthcare dashboard prototype focused on clear longitudinal visualizations, explainable insights, and safe wearable integration.
 
-Badges: [Build status: local] [License: MIT]
+Badges: ![CI](https://github.com/2301030400017-sou/embs-intern/actions/workflows/ci.yml/badge.svg) [License: MIT]
 
 ## Features
 

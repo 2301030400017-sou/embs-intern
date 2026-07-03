@@ -92,7 +92,7 @@ export default function ProfileForm({ initialProfile, onClose, onSuccess }: Prof
         <form onSubmit={handleSubmit} className="profile-form">
 
           {/* Row 1: Name + Age + Sex */}
-          <div className="form-row form-row--3">
+          <div className="form-row form-row--4">
             <div className="form-group form-group--span2">
               <label htmlFor="prof-name">Full Name</label>
               <input type="text" id="prof-name" value={name} onChange={(e) => setName(e.target.value)} required />
